@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.lessThan;
 
 public class TestYandexSpellerJSON {
 
-    // simple usage of RestAssured library: direct request call and response validations in test.
+    // simple usage of RestAssured library: direct request call and Response validations in test.
     @Test
     public void simpleSpellerApiCall() {
         RestAssured
@@ -116,7 +116,7 @@ public class TestYandexSpellerJSON {
     }
 
 
-    // use base request and response specifications to form request and validate response.
+    // use base request and Response specifications to form request and validate Response.
     @Test
     public void useBaseRequestAndResponseSpecifications() {
         RestAssured
@@ -137,7 +137,7 @@ public class TestYandexSpellerJSON {
     }
 
 
-    //validate an object we've got in API response
+    //validate an object we've got in API Response
     @Test
     public void validateSpellerAnswerAsAnObject() {
         List<YandexSpellerAnswer> answers =
