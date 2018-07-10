@@ -18,6 +18,10 @@ public class YandexSpellerConstants {
     public static final String WORD_WITH_DOUBLE = "go on on";
     public static final String WORD_WITH_URL = "https://tech.yandex.ru" + RIGHT_WORD_EN;
     public static final String WORD_WITH_URL_AND_REPEAT = "https://tech.yandex.ru" + WORD_WITH_DOUBLE + "ok";
+    public static final int IGNORE_DIGITS = 2;
+    public static final int IGNORE_URLS = 4;
+    public static final int FIND_REPEAT_WORDS = 8;
+    public static final int IGNORE_CAPITALIZATION = 512;
 
 
     public enum Languages {

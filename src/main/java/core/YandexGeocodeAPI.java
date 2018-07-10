@@ -7,6 +7,7 @@ import io.restassured.specification.RequestSpecification;
 
 import java.util.HashMap;
 
+import static enums.GeocodeParam.FIRST_LOCATION;
 import static enums.YandexAPI.*;
 
 public class YandexGeocodeAPI {
@@ -25,13 +26,13 @@ public class YandexGeocodeAPI {
         }
 
         public YandexGeocodeAPI.ApiBuilder location() {
-            yandexGeocodeAPI.params.put(FIRST_LOCATION.key, FIRST_LOCATION.value);
+            yandexGeocodeAPI.params.put(GEOCODE.key, FIRST_LOCATION.param);
             return this;
         }
 
 
         public YandexGeocodeAPI.ApiBuilder location(String location) {
-            yandexGeocodeAPI.params.put(FIRST_LOCATION.key, location);
+            yandexGeocodeAPI.params.put(GEOCODE.key, location);
             return this;
         }
 

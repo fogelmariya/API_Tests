@@ -158,7 +158,7 @@ public class TestYandexSpellerJSON {
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with().
                                 text(WORD_WITH_LEADING_DIGITS)
-                                .options("2")
+                                .options(String.valueOf(IGNORE_DIGITS))
                                 .callApi());
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
     }
@@ -169,7 +169,7 @@ public class TestYandexSpellerJSON {
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with().
                                 text(WORD_WITH_WRONG_CAPITAL)
-                                .options("512")
+                                .options(String.valueOf(IGNORE_CAPITALIZATION))
                                 .callApi());
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
     }
@@ -183,7 +183,7 @@ public class TestYandexSpellerJSON {
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with().
                                 text(WORD_WITH_URL)
-                                .options("4")
+                                .options(String.valueOf(IGNORE_URLS))
                                 .callApi());
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
     }
@@ -194,19 +194,19 @@ public class TestYandexSpellerJSON {
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with().
                                 text(WORD_WITH_DOUBLE)
-                                .options("8")
+                                .options(String.valueOf(FIND_REPEAT_WORDS))
                                 .callApi());
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
     }
 
     @Test
-    public void thirdTest(){
+    public void wrongWordTest(){
         List<YandexSpellerAnswer> answers =
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with()
                                 .language(Languages.UK)
                                 .text(WRONG_WORD_EN)
-                                .options("8")
+                                .options(String.valueOf(FIND_REPEAT_WORDS))
                                 .callApi());
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(1));
     }
@@ -217,37 +217,37 @@ public class TestYandexSpellerJSON {
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with().
                                 text(WORD_WITH_LEADING_DIGITS + WORD_WITH_DOUBLE)
-                                .options("10")
+                                .options(String.valueOf(IGNORE_DIGITS + FIND_REPEAT_WORDS))
                                 .callApi());
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
     }
 
     @Test
-    public void fithTest() {
+    public void wordWithDoubleTest() {
         List<YandexSpellerAnswer> answers =
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with()
-                                .options("8")
+                                .options(String.valueOf(FIND_REPEAT_WORDS))
                                 .text(RIGHT_WORD_EN + WORD_WITH_DOUBLE).callApi());
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
     }
 
     @Test
-    public void sixTest() {
+    public void optionsIgnoreDoubleAndUrlTest() {
         List<YandexSpellerAnswer> answers =
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with()
-                                .options("12")
+                                .options(String.valueOf(IGNORE_URLS + FIND_REPEAT_WORDS))
                                 .text(RIGHT_WORD_EN + WORD_WITH_DOUBLE +WORD_WITH_URL).callApi());
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
     }
 
     @Test
-    public void seventhTest() {
+    public void optionsIgnoreRepeatAndUrlTest() {
         List<YandexSpellerAnswer> answers =
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with()
-                                .options("12")
+                                .options(String.valueOf(IGNORE_URLS + FIND_REPEAT_WORDS))
                                 .text(WORD_WITH_URL_AND_REPEAT).callApi());
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
     }
@@ -257,7 +257,7 @@ public class TestYandexSpellerJSON {
         List<YandexSpellerAnswer> answers =
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with()
-                                .options("10")
+                                .options(String.valueOf(IGNORE_DIGITS + FIND_REPEAT_WORDS))
                                 .text(WORD_WITH_DOUBLE + WORD_WITH_MIDDLE_DIGITS).callApi());
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
     }
@@ -267,7 +267,7 @@ public class TestYandexSpellerJSON {
         List<YandexSpellerAnswer> answers =
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with()
-                                .options("514")
+                                .options(String.valueOf(IGNORE_DIGITS + IGNORE_CAPITALIZATION))
                                 .text(WORD_WITH_DOUBLE + WORD_WITH_MIDDLE_DIGITS).callApi());
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
     }

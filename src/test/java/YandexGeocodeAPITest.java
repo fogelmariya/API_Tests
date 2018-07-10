@@ -1,15 +1,13 @@
 import core.YandexGeocodeAPI;
 import core.YandexGeocodeAnswer;
-import enums.GeocodeParam;
-import enums.YandexAPI;
 import org.junit.Assert;
 import org.junit.Test;
 
 import static enums.GeocodeParam.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 
 public class YandexGeocodeAPITest {
+
+    private YandexGeocodeMatcher yandexGeocodeMatcher = new YandexGeocodeMatcher();
 
     @Test
     public void getPosTest() {
@@ -18,8 +16,9 @@ public class YandexGeocodeAPITest {
                         YandexGeocodeAPI.with()
                                 .location()
                                 .callApi());
-        assertThat("wrong coordinates", answer.getResponse().getGeoObjectCollection().getFeatureMember()
-                .get(0).getGeoObject().getPoint().getPos(), equalTo("37.587614 55.753083"));
+        Assert.assertTrue("wrong position", yandexGeocodeMatcher.matchesPos(answer, FIRST_COORDINATES.param));
+//        assertThat("wrong coordinates", answer.getResponse().getGeoObjectCollection().getFeatureMember()
+//                .get(0).getGeoObject().getPoint().getPos(), equalTo(FIRST_COORDINATES.param));
     }
 
     @Test
@@ -27,11 +26,13 @@ public class YandexGeocodeAPITest {
         YandexGeocodeAnswer answer =
                 YandexGeocodeAPI.getYandexSpellerAnswers(
                         YandexGeocodeAPI.with()
-                                .location(YandexAPI.FIRST_BACK_LOCATION.value)
+                                .location(FIRST_BACK_LOCATION.param)
                                 .sco(LATLONG.param)
                                 .callApi());
-        Assert.assertNotEquals(answer.getResponse().getGeoObjectCollection().getFeatureMember().get(0).getGeoObject()
-                .getMetaDataProperty().getGeocoderMetaData().getAddressDetails().getCountry().getCountryName(), "Россия");
+        // Assert.assertThat(answer(Matchers.allOf(Matchers.containsString("Россия"))));
+//        Assert.assertNotEquals("Россия", answer.getResponse().getGeoObjectCollection().getFeatureMember().get(0).getGeoObject()
+//                .getMetaDataProperty().getGeocoderMetaData().getAddressDetails().getCountry().getCountryName());
+        Assert.assertTrue("wrong reverse geocode", !yandexGeocodeMatcher.matchesCountry(answer, "Россия"));
     }
 
     @Test
@@ -39,11 +40,13 @@ public class YandexGeocodeAPITest {
         YandexGeocodeAnswer answer =
                 YandexGeocodeAPI.getYandexSpellerAnswers(
                         YandexGeocodeAPI.with()
-                                .location(YandexAPI.FIRST_BACK_LOCATION.value)
+                                .location(FIRST_BACK_LOCATION.param)
                                 .kind(METRO.param)
                                 .callApi());
-        Assert.assertEquals(TEATRALNAYA_METRO.param, answer.getResponse().getGeoObjectCollection()
-                .getFeatureMember().get(1).getGeoObject().getName());
+
+        Assert.assertTrue("wrong find metro", yandexGeocodeMatcher.matchesName(answer, TEATRALNAYA_METRO.param));
+//        Assert.assertEquals(TEATRALNAYA_METRO.param, answer.getResponse().getGeoObjectCollection()
+//                .getFeatureMember().get(1).getGeoObject().getName());
     }
 
     @Test
@@ -51,10 +54,11 @@ public class YandexGeocodeAPITest {
         YandexGeocodeAnswer answer =
                 YandexGeocodeAPI.getYandexSpellerAnswers(
                         YandexGeocodeAPI.with()
-                                .location(YandexAPI.FIRST_BACK_LOCATION.value)
+                                .location(FIRST_BACK_LOCATION.param)
                                 .kind(METRO.param)
                                 .callApi());
-        Assert.assertEquals(10, answer.getResponse().getGeoObjectCollection().getFeatureMember().size());
+        Assert.assertTrue("wrong size of answers", yandexGeocodeMatcher.matchesSize(answer, 10));
+        //Assert.assertEquals(10, answer.getResponse().getGeoObjectCollection().getFeatureMember().size());
     }
 
     @Test
@@ -62,10 +66,11 @@ public class YandexGeocodeAPITest {
         YandexGeocodeAnswer answer =
                 YandexGeocodeAPI.getYandexSpellerAnswers(
                         YandexGeocodeAPI.with()
-                                .location(YandexAPI.FIRST_BACK_LOCATION.value)
+                                .location(FIRST_BACK_LOCATION.param)
                                 .kind(STREET.param)
                                 .callApi());
-        Assert.assertEquals(10, answer.getResponse().getGeoObjectCollection().getFeatureMember().size());
+        Assert.assertTrue("wrong size of answers", yandexGeocodeMatcher.matchesSize(answer, 10));
+       // Assert.assertEquals(10, answer.getResponse().getGeoObjectCollection().getFeatureMember().size());
     }
 
     @Test
@@ -73,12 +78,13 @@ public class YandexGeocodeAPITest {
         YandexGeocodeAnswer answer =
                 YandexGeocodeAPI.getYandexSpellerAnswers(
                         YandexGeocodeAPI.with()
-                                .location(YandexAPI.FIRST_BACK_LOCATION.value)
+                                .location(FIRST_BACK_LOCATION.param)
                                 .ll(LL_FIRST_PARAM.param)
                                 .spn(SPN_FIRST_PARAM.param)
                                 .rspn()
                                 .callApi());
-        Assert.assertEquals(7, answer.getResponse().getGeoObjectCollection().getFeatureMember().size());
+        Assert.assertTrue("wrong size of answers", yandexGeocodeMatcher.matchesSize(answer, 7));
+       // Assert.assertEquals(7, answer.getResponse().getGeoObjectCollection().getFeatureMember().size());
     }
 
     @Test
@@ -91,7 +97,8 @@ public class YandexGeocodeAPITest {
                                 .spn(SPN_FIRST_PARAM.param)
                                 .rspn()
                                 .callApi());
-        Assert.assertEquals(7, answer.getResponse().getGeoObjectCollection().getFeatureMember().size());
+        Assert.assertTrue("wrong size of answers",yandexGeocodeMatcher.matchesSize(answer, 7));
+       // Assert.assertEquals(7, answer.getResponse().getGeoObjectCollection().getFeatureMember().size());
     }
 
     @Test
@@ -104,9 +111,11 @@ public class YandexGeocodeAPITest {
                                 .spn(SPN_FIRST_PARAM.param)
                                 .rspn()
                                 .callApi());
-        Assert.assertEquals(MOSCOW_REGION.param, answer.getResponse().getGeoObjectCollection().getFeatureMember()
-                .get(1).getGeoObject().getMetaDataProperty().getGeocoderMetaData().getAddressDetails().getCountry()
-                .getAdministrativeArea().getAdministrativeAreaName());
+        Assert.assertTrue(yandexGeocodeMatcher.matchesAdministrativeArea(answer, MOSCOW_REGION.param));
+        Assert.assertFalse(yandexGeocodeMatcher.matchesAdministrativeArea(answer, AMUR_REGION.param));
+//        Assert.assertEquals(MOSCOW_REGION.param, answer.getResponse().getGeoObjectCollection().getFeatureMember()
+//                .get(1).getGeoObject().getMetaDataProperty().getGeocoderMetaData().getAddressDetails().getCountry()
+//                .getAdministrativeArea().getAdministrativeAreaName());
     }
 
     @Test
@@ -114,9 +123,10 @@ public class YandexGeocodeAPITest {
         YandexGeocodeAnswer answer =
                 YandexGeocodeAPI.getYandexSpellerAnswers(
                         YandexGeocodeAPI.with()
-                                .location("Ивановка")
+                                .location(IVANOVKA_LOCATION.param)
                                 .callApi());
-        Assert.assertEquals("Амурская область", answer.getResponse().getGeoObjectCollection().getFeatureMember()
+        Assert.assertTrue(yandexGeocodeMatcher.matchesAdministrativeArea(answer, AMUR_REGION.param));
+        Assert.assertEquals(AMUR_REGION.param, answer.getResponse().getGeoObjectCollection().getFeatureMember()
                 .get(9).getGeoObject().getMetaDataProperty().getGeocoderMetaData().getAddressDetails().getCountry()
                 .getAdministrativeArea().getAdministrativeAreaName());
     }
@@ -126,22 +136,11 @@ public class YandexGeocodeAPITest {
         YandexGeocodeAnswer answer =
                 YandexGeocodeAPI.getYandexSpellerAnswers(
                         YandexGeocodeAPI.with()
-                                .location("Масква")
+                                .location(MOSCOW_WRONG.param)
                                 .callApi());
-        Assert.assertEquals("Канада", answer.getResponse().getGeoObjectCollection().getFeatureMember()
-                .get(3).getGeoObject().getMetaDataProperty().getGeocoderMetaData().getAddressDetails().getCountry()
-                .getCountryName());
-    }
-
-    @Test
-    public void tenthTest() {
-        YandexGeocodeAnswer answer =
-                YandexGeocodeAPI.getYandexSpellerAnswers(
-                        YandexGeocodeAPI.with()
-                                .location("Масква")
-                                .callApi());
-        Assert.assertEquals("Канада", answer.getResponse().getGeoObjectCollection().getFeatureMember()
-                .get(3).getGeoObject().getMetaDataProperty().getGeocoderMetaData().getAddressDetails().getCountry()
-                .getCountryName());
+        Assert.assertTrue(yandexGeocodeMatcher.matchesCountry(answer, CANADA.param));
+//        Assert.assertEquals(CANADA.param, answer.getResponse().getGeoObjectCollection().getFeatureMember()
+//                .get(3).getGeoObject().getMetaDataProperty().getGeocoderMetaData().getAddressDetails().getCountry()
+//                .getCountryName());
     }
 }
